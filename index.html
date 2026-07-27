@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智慧健康便當｜自助點餐</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <h1>🍱 智慧健康便當自助點餐</h1>
+  <p>不用思考，也能吃得健康　·　茶宗風健康餐盒</p>
+  <div style="margin-top:6px"><a class="navlink" href="admin.html">切換到業者後台 →</a></div>
+</header>
+
+<div class="wrap">
+
+  <!-- 匿名 ID -->
+  <div class="idbar">
+    <div>
+      <div class="idlabel">您的匿名點餐編號（免登入、不留個資）</div>
+      <div class="idval" id="anonId">BENTO-----</div>
+    </div>
+    <div class="qr" title="掃碼即用"></div>
+  </div>
+
+  <!-- 選模式 -->
+  <div class="section-title">① 選擇點餐模式</div>
+  <div class="modes">
+    <div class="mode-card" data-mode="health">
+      <div class="emoji">🟢</div><div class="mname">健康推薦</div>
+      <div class="mdesc">說目標，幫你挑</div>
+    </div>
+    <div class="mode-card" data-mode="free">
+      <div class="emoji">🟡</div><div class="mname">自由點餐</div>
+      <div class="mdesc">自己瀏覽選擇</div>
+    </div>
+    <div class="mode-card" data-mode="random">
+      <div class="emoji">🔵</div><div class="mname">隨機推薦</div>
+      <div class="mdesc">不知道吃啥？交給它</div>
+    </div>
+  </div>
+
+  <!-- 健康推薦：選目標 -->
+  <div id="goalPanel" class="hidden">
+    <div class="section-title">② 你的目標</div>
+    <div class="chips" id="goalChips">
+      <div class="chip" data-goal="cut">減脂</div>
+      <div class="chip" data-goal="bulk">增肌</div>
+      <div class="chip" data-goal="maintain">維持健康</div>
+    </div>
+    <div class="section-title">飲食限制（可選，會過濾掉不能吃的）<small>加分功能</small></div>
+    <div class="chips" id="filterChips">
+      <div class="chip filter" data-ex="牛肉">不吃牛</div>
+      <div class="chip filter" data-ex="豬肉">不吃豬</div>
+      <div class="chip filter" data-ex="海鮮">不吃海鮮</div>
+      <div class="chip filter" data-veg="1">純素食</div>
+    </div>
+  </div>
+
+  <!-- 推薦結果 -->
+  <div id="recoResult" class="hidden">
+    <div class="section-title">✨ 系統推薦</div>
+    <div id="recoBox"></div>
+  </div>
+
+  <!-- 便當清單（自由點餐）-->
+  <div id="listResult" class="hidden">
+    <div class="section-title">選擇主餐 <small>點一下便當即可客製化</small></div>
+    <div class="grid" id="mealGrid"></div>
+  </div>
+
+  <!-- 客製化 -->
+  <div id="customPanel" class="hidden">
+    <div class="section-title">③ 客製化你的便當 <small>營養與價格會即時重算</small></div>
+    <div class="custom" id="customBody"></div>
+  </div>
+
+</div>
+
+<!-- 即時營養重算條 -->
+<div class="live hidden" id="liveBar">
+  <div class="stat"><b id="lvKcal">0</b><span>大卡 kcal</span></div>
+  <div class="stat"><b id="lvProtein">0</b><span>蛋白質 g</span></div>
+  <div class="stat"><b id="lvPrice">$0</b><span>總價</span></div>
+  <button class="btn" id="orderBtn">送出訂單</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

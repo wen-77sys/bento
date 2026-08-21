@@ -21,7 +21,7 @@
       <div class="idlabel">您的匿名點餐編號（免登入、不留個資）</div>
       <div class="idval" id="anonId">BENTO-----</div>
     </div>
-    <div class="qr" title="掃碼即用"></div>
+    <img class="qrimg" src="qrcode.png" alt="掃碼即用" title="手機掃碼即可點餐">
   </div>
 
   <!-- 選模式 -->
@@ -49,7 +49,15 @@
       <div class="chip" data-goal="bulk">增肌</div>
       <div class="chip" data-goal="maintain">維持健康</div>
     </div>
-    <div class="section-title">飲食限制（可選，會過濾掉不能吃的）<small>加分功能</small></div>
+    <div class="section-title">預算上限（可選）<small>硬性篩選 · 先排除超出預算的便當</small></div>
+    <div class="chips" id="budgetChips">
+      <div class="chip budget active" data-budget="0">不限</div>
+      <div class="chip budget" data-budget="100">$100 以內</div>
+      <div class="chip budget" data-budget="120">$120 以內</div>
+      <div class="chip budget" data-budget="140">$140 以內</div>
+    </div>
+
+    <div class="section-title">飲食限制（可選，會過濾掉不能吃的）<small>硬性篩選 · 過敏原／忌口</small></div>
     <div class="chips" id="filterChips">
       <div class="chip filter" data-ex="牛肉">不吃牛</div>
       <div class="chip filter" data-ex="豬肉">不吃豬</div>

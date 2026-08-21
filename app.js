@@ -6,6 +6,7 @@ const state = {
   anonId: '',
   mode: null,       // health / free / random
   goal: null,       // cut / bulk / maintain
+  budget: 0,        // 預算上限，0 = 不限
   filters: { ex: new Set(), vegOnly: false },
   meal: null,       // 選中的便當
   base: BASE_OPTIONS[0],
@@ -30,9 +31,21 @@ function availableMenu() {
   return MENU.filter(m => !off.has(m.id));
 }
 function passFilter(m) {
+  if (state.budget && m.price > state.budget) return false;   // 硬性篩選①：預算
   if (state.filters.vegOnly && !m.tags.includes('素食')) return false;
-  for (const ex of state.filters.ex) if (m.tags.includes(ex)) return false;
+  for (const ex of state.filters.ex) if (m.tags.includes(ex)) return false;   // 硬性篩選②：忌口
   return true;
+}
+
+/* 硬性篩選過程說明（給客人看，也讓推薦可解釋）*/
+function filterNote(poolLen) {
+  const cond = [];
+  if (state.budget) cond.push(`預算 ≤ $${state.budget}`);
+  if (state.filters.vegOnly) cond.push('純素食');
+  state.filters.ex.forEach(ex => cond.push('不吃' + ex.replace('肉', '')));
+  const total = availableMenu().length;
+  if (!cond.length) return `硬性篩選｜未設限制，${total} 個品項全數進入評分`;
+  return `硬性篩選｜${cond.join('、')} → 由 ${total} 個品項篩到 ${poolLen} 個候選，再進行健康評分`;
 }
 
 /* --- 選模式 --- */
@@ -60,6 +73,14 @@ $$('#goalChips .chip').forEach(c => c.addEventListener('click', () => {
   state.goal = c.dataset.goal;
   doRecommend();
 }));
+$$('#budgetChips .chip').forEach(c => c.addEventListener('click', () => {
+  $$('#budgetChips .chip').forEach(x => x.classList.remove('active'));
+  c.classList.add('active');
+  state.budget = Number(c.dataset.budget);
+  if (state.goal) doRecommend();
+  if (state.mode === 'free') renderList();
+  if (state.mode === 'random') doRandom();
+}));
 $$('#filterChips .chip').forEach(c => c.addEventListener('click', () => {
   c.classList.toggle('active');
   if (c.dataset.veg) state.filters.vegOnly = c.classList.contains('active');
@@ -78,7 +99,8 @@ function doRecommend() {
   const pool = availableMenu().filter(passFilter);
   show('#recoResult');
   if (pool.length === 0) {
-    $('#recoBox').innerHTML = `<div class="reco-box"><p>目前沒有符合你飲食限制的便當，請調整條件。</p></div>`;
+    $('#recoBox').innerHTML = `<div class="reco-box"><p>目前沒有同時符合你預算與飲食限制的便當，請放寬條件。</p>
+      <div class="formula">${filterNote(0)}</div></div>`;
     return;
   }
   const ranked = pool.map(m => ({ m, s: healthScore(m, state.goal) }))
@@ -99,7 +121,7 @@ function doRecommend() {
         <span class="badge">蛋白質 ${top.protein}g</span>
       </div>
       <p class="why">💡 ${reasonFor(top, state.goal)}</p>
-      <div class="formula">評分公式 ｜ ${f}<br>推薦分數：${(ranked[0].s * 100).toFixed(0)} 分（分數越高越符合目標）</div>
+      <div class="formula">${filterNote(pool.length)}<br>評分公式 ｜ ${f}<br>推薦分數：${(ranked[0].s * 100).toFixed(0)} 分（分數越高越符合目標）</div>
       <button class="btn block" onclick="pickMeal('${top.id}')">選這個並客製化 →</button>
     </div>
     ${runnerUp.length ? `<p class="muted" style="margin-top:10px">其他推薦：${runnerUp.map(m => `${m.icon}${m.name}`).join('、')}</p>` : ''}

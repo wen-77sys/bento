@@ -50,6 +50,12 @@ header.top p  { margin: 4px 0 0; font-size: .82rem; opacity: .9; }
     repeating-linear-gradient(0deg, var(--ink) 0 4px, #fff 4px 8px);
   background-blend-mode: multiply; opacity: .85; flex: none;
 }
+/* 真實 QR code（掃了會回到本點餐頁）*/
+.qrimg {
+  width: 88px; height: 88px; flex: none; border-radius: 8px;
+  background: #fff; padding: 4px; box-sizing: border-box;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, .14);
+}
 
 /* 區塊標題 */
 .section-title { font-size: 1.05rem; font-weight: 700; margin: 26px 0 12px; display: flex; align-items: center; gap: 8px; }
